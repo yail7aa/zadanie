@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+<body>
+  <main>
+    <section>
+      <div class="container">
+        <h2>Задача 1. Копилка</h2>
+        <pre class="out" id="out1"></pre>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Задача 2. Животные</h2>
+        <pre class="out" id="out2"></pre>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Задача 3. Список задач</h2>
+        <pre class="out" id="out3"></pre>
+      </div>
+    </section>
+  </main>
+</body>
+
+<script>
+  function log(out, text) {
+    console.log(text);
+    out.textContent += text + "\n";
+  }
+
+  // Задача 1
+  const out1 = document.getElementById("out1");
+
+  class PiggyBank {
+    #balance = 0;
+
+    put(amount) {
+      if (amount <= 0) {
+        log(out1, "Некорректная сумма");
+        return;
+      }
+      this.#balance += amount;
+    }
+
+    take(amount) {
+      if (amount > this.#balance) {
+        log(out1, "Недостаточно средств");
+        return;
+      }
+      this.#balance -= amount;
+    }
+
+    getBalance() {
+      return this.#balance;
+    }
+  }
+
+  const bank = new PiggyBank();
+  bank.put(100);
+  bank.put(50);
+  bank.take(30);
+  log(out1, "Баланс: " + bank.getBalance());
+  bank.take(1000);
+  bank.put(-5);
+
+  // Задача 2
+  const out2 = document.getElementById("out2");
+
+  class Animal {
+    constructor(name) {
+      this.name = name;
+    }
+    speak() {
+      log(out2, this.name + " издаёт звук");
+    }
+  }
+
+  class Cat extends Animal {
+    speak() {
+      log(out2, this.name + " говорит: Мяу");
+    }
+  }
+
+  class Dog extends Animal {
+    speak() {
+      log(out2, this.name + " говорит: Гав");
+    }
+    fetch() {
+      log(out2, this.name + " принёс палку");
+    }
+  }
+
+  const animals = [
+    new Animal("Зверь"),
+    new Cat("Мурка"),
+    new Cat("Барсик"),
+    new Dog("Шарик"),
+  ];
+
+  for (const animal of animals) {
+    animal.speak();
+    if (animal instanceof Dog) {
+      animal.fetch();
+    }
+  }
+
+  // Задача 3
+  const out3 = document.getElementById("out3");
+
+  class Task {
+    constructor(title) {
+      this.title = title;
+      this.done = false;
+    }
+
+    complete() {
+      this.done = true;
+    }
+
+    toggle() {
+      this.done = !this.done;
+    }
+
+    toString() {
+      if (this.done) {
+        return "[x] " + this.title;
+      }
+      return "[ ] " + this.title;
+    }
+  }
+
+  class TodoList {
+    constructor() {
+      this.tasks = [];
+    }
+
+    add(title) {
+      this.tasks.push(new Task(title));
+    }
+
+    complete(index) {
+      this.tasks[index].complete();
+    }
+
+    print() {
+      for (const task of this.tasks) {
+        console.log(task.toString());
+      }
+    }
+
+    countDone() {
+      let count = 0;
+      for (const task of this.tasks) {
+        if (task.done) {
+          count++;
+        }
+      }
+      return count;
+    }
+
+    render() {
+      out3.textContent = "";
+
+      for (const task of this.tasks) {
+        const line = document.createElement("span");
+        line.textContent = task.toString();
+        line.style.display = "block";
+        line.style.cursor = "pointer";
+
+        line.onclick = () => {
+          task.toggle();
+          this.render();
+        };
+
+        out3.appendChild(line);
+      }
+
+      const info = document.createElement("span");
+      info.style.display = "block";
+      info.textContent = "Выполнено: " + this.countDone() + " из " + this.tasks.length;
+      out3.appendChild(info);
+    }
+  }
+
+  const list = new TodoList();
+  list.add("Купить хлеб");
+  list.add("Сделать домашку");
+  list.add("Позвонить маме");
+  list.complete(0);
+  list.print();
+  list.render();
+</script>
+</html>

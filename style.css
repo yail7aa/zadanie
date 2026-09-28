@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    font-family: 'Google Sans';
+}
+
+h1, h2, h3, h4, h5, p, a {
+    color: #121212;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    padding-top: 64px;
+}
+
+section {
+    padding: 16px 24px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
